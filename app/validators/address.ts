@@ -1,0 +1,83 @@
+import vine from '@vinejs/vine'
+
+export const createAddressValidator = vine.compile(
+  vine.object({
+    userId: vine.number(),
+    zipCode: vine.string().trim(),
+    address: vine.string().trim(),
+    number: vine.string().trim(),
+    complement: vine.string().trim(),
+    neighborhood: vine.string().trim(),
+    city: vine.string().trim(),
+    uf: vine.enum([
+      'AC',
+      'AL',
+      'AP',
+      'AM',
+      'BA',
+      'CE',
+      'DF',
+      'ES',
+      'GO',
+      'MA',
+      'MT',
+      'MS',
+      'MG',
+      'PA',
+      'PB',
+      'PR',
+      'PE',
+      'PI',
+      'RJ',
+      'RN',
+      'RS',
+      'RO',
+      'RR',
+      'SC',
+      'SP',
+      'SE',
+      'TO',
+    ]),
+  })
+)
+
+export const updateAddressValidator = vine.compile(
+  vine.object({
+    zipCode: vine.string().trim().optional(),
+    address: vine.string().trim().optional(),
+    number: vine.string().trim().optional(),
+    complement: vine.string().trim().optional(),
+    neighborhood: vine.string().trim().optional(),
+    uf: vine
+      .enum([
+        'AC',
+        'AL',
+        'AP',
+        'AM',
+        'BA',
+        'CE',
+        'DF',
+        'ES',
+        'GO',
+        'MA',
+        'MT',
+        'MS',
+        'MG',
+        'PA',
+        'PB',
+        'PR',
+        'PE',
+        'PI',
+        'RJ',
+        'RN',
+        'RS',
+        'RO',
+        'RR',
+        'SC',
+        'SP',
+        'SE',
+        'TO',
+      ])
+      .optional(),
+  })
+)
