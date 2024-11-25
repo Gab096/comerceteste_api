@@ -10,29 +10,51 @@ import router from '@adonisjs/core/services/router'
 
 const ProductController = () => import('../app/controllers/products_controller.js')
 const UsersController = () => import('../app/controllers/users_controller.js')
+const SessionController = () => import('../app/controllers/session_controller.js')
 const AddressesController = () => import('../app/controllers/addresses_controller.js')
 const OrdersController = () => import('../app/controllers/orders_controller.js')
 
-router.get('/products', [ProductController, 'index'])
-router.get('/products/:id', [ProductController, 'show'])
-router.post('/products', [ProductController, 'store'])
-router.delete('/products/:id', [ProductController, 'destroy'])
-router.put('/products/:id', [ProductController, 'update'])
+router.group(() => {
+  /*     router.get('', [ProductController, 'index'])
+    router.get('/:id', [ProductController, 'show'])
+    router.post('', [ProductController, 'store'])
+    router.delete('/:id', [ProductController, 'destroy'])
+    router.put('/:id', [ProductController, 'update']) */
+  router.resource('/products', ProductController).apiOnly()
+})
 
-router.get('/users', [UsersController, 'index'])
-router.get('/users/:id', [UsersController, 'show'])
-router.post('/users', [UsersController, 'store'])
-router.delete('/users/:id', [UsersController, 'destroy'])
-router.put('/users/:id', [UsersController, 'update'])
+router
+  .group(() => {
+    router.post('', [SessionController, 'store'])
+  })
+  .prefix('/session')
 
-router.get('/adresses', [AddressesController, 'index'])
-router.get('/adresses/:id', [AddressesController, 'show'])
-router.post('/adresses', [AddressesController, 'store'])
-router.delete('/adresses/:id', [AddressesController, 'destroy'])
-router.put('/adresses/:id', [AddressesController, 'update'])
+router
+  .group(() => {
+    router.get('', [UsersController, 'index'])
+    router.get('/:id', [UsersController, 'show'])
+    router.post('', [UsersController, 'store'])
+    router.delete('/:id', [UsersController, 'destroy'])
+    router.put('/:id', [UsersController, 'update'])
+  })
+  .prefix('/users')
 
-router.get('/orders', [OrdersController, 'index'])
-router.get('/orders/:id', [OrdersController, 'show'])
-router.post('/orders', [OrdersController, 'store'])
-router.delete('/orders/:id', [OrdersController, 'destroy'])
-router.put('/orders/:id', [OrdersController, 'update'])
+router
+  .group(() => {
+    router.get('', [AddressesController, 'index'])
+    router.get('/:id', [AddressesController, 'show'])
+    router.post('', [AddressesController, 'store'])
+    router.delete('/:id', [AddressesController, 'destroy'])
+    router.put('/:id', [AddressesController, 'update'])
+  })
+  .prefix('/adresses')
+
+router
+  .group(() => {
+    router.get('', [OrdersController, 'index'])
+    router.get('/:id', [OrdersController, 'show'])
+    router.post('', [OrdersController, 'store'])
+    router.delete('/:id', [OrdersController, 'destroy'])
+    router.put('/:id', [OrdersController, 'update'])
+  })
+  .prefix('/orders')

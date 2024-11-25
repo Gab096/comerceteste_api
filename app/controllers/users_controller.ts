@@ -1,4 +1,6 @@
+import Address from '#models/address'
 import User from '#models/user'
+import { createAddressValidator } from '#validators/address'
 import { createUserValidator, updateUserValidator } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -33,22 +35,32 @@ export default class UsersController {
   }
 
   async store({ request, response }: HttpContext) {
+    const data = request.all()
     try {
-      const data = request.all()
-      const payload = await createUserValidator.validate(data)
+      const userPayload = await createUserValidator.validate(data)
+      const addressPayload = await createAddressValidator.validate(data)
 
       const user = new User()
 
-      user
+      await user
         .merge({
-          ...payload,
+          ...userPayload,
+        })
+        .save()
+
+      const address = new Address()
+
+      await address
+        .merge({
+          ...addressPayload,
+          userId: user.id,
         })
         .save()
 
       return response.ok({
         type: 'success',
         message: 'Cadastrado com sucesso',
-        data: payload,
+        data: userPayload,
       })
     } catch (error) {
       return response.badRequest({

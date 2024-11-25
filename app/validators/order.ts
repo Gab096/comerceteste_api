@@ -3,7 +3,7 @@ import vine from '@vinejs/vine'
 
 export const createOrderValidator = vine.compile(
   vine.object({
-    addressId: vine.number(),
+    addressId: vine.number().optional(),
     total: vine.number(),
     products: vine.array(
       vine.object({

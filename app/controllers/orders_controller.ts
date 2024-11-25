@@ -33,15 +33,17 @@ export default class OrdersController {
     }
   }
 
-  async store({ request, response }: HttpContext) {
+  async store({ request, response, auth }: HttpContext) {
     try {
       const data = request.all()
 
       const { addressId, ...payload } = await createOrderValidator.validate(data)
       const order = new Order()
 
-      const address = await Address.findBy({
-        id: addressId,
+      const user = await auth.authenticate()
+
+      const address = await Address.findByOrFail({
+        userId: user.id,
       })
 
       if (!address) {
@@ -50,7 +52,7 @@ export default class OrdersController {
 
       order.merge({
         userId: address?.userId,
-        addressId,
+        addressId: address.id,
         ...payload,
       })
 
